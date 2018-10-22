@@ -24,58 +24,120 @@ namespace AnimationDemo
     /// 
     public sealed partial class MainPage : Page
     {
+
+
         public MainPage()
         {
             this.InitializeComponent();
+            /* var ellipse1 = new Ellipse();
+            ellipse1.Fill = new SolidColorBrush(Windows.UI.Colors.SteelBlue);
+            ellipse1.Width = 100;
+            ellipse1.Height = 100;
+             */
         }
+
 
         DispatcherTimer dispatcherTimer;
         DateTimeOffset startTime;
         DateTimeOffset lastTime;
-        DateTimeOffset stopTime;
+        //DateTimeOffset stopTime;
+
         int timesTicked = 1;
-        int timesToTick = 10;
+        //int timesToTick = 10;
+
+        int positionX = 50;
+        int positionY = 50;
+        int radius = 50;
+        int speedX = 5;
+        int speedY = 5;
 
         public void DispatcherTimerSetup()
         {
             dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += dispatcherTimer_Tick;
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 1);
             //IsEnabled defaults to false
-            TimerLog.Text += "dispatcherTimer.IsEnabled = " + dispatcherTimer.IsEnabled + "\n";
+            //TimerLog.Text += "dispatcherTimer.IsEnabled = " + dispatcherTimer.IsEnabled + "\n";  //for debugging
             startTime = DateTimeOffset.Now;
             lastTime = startTime;
-            TimerLog.Text += "Calling dispatcherTimer.Start()\n";
+            // TimerLog.Text += "Calling dispatcherTimer.Start()\n";  //for debugging purposes
             dispatcherTimer.Start();
             //IsEnabled should now be true after calling start
-            TimerLog.Text += "dispatcherTimer.IsEnabled = " + dispatcherTimer.IsEnabled + "\n";
+            //TimerLog.Text += "dispatcherTimer.IsEnabled = " + dispatcherTimer.IsEnabled + "\n"; //for debugging
         }
 
         void dispatcherTimer_Tick(object sender, object e)
         {
+
             DateTimeOffset time = DateTimeOffset.Now;
             TimeSpan span = time - lastTime;
             lastTime = time;
             //Time since last tick should be very very close to Interval
-            TimerLog.Text += timesTicked + "\t time since last tick: " + span.ToString() + "\n";
+            //TimerLog.Text += timesTicked + "\t time since last tick: " + span.ToString() + "\n";  for debugging
             timesTicked++;
+
+            /*
+            ellipse1.PositionX++;
+            ellipse1.PositionY++;
+            */
+
+            /*
             if (timesTicked > timesToTick)
             {
                 stopTime = time;
-                TimerLog.Text += "Calling dispatcherTimer.Stop()\n";
+                //TimerLog.Text += "Calling dispatcherTimer.Stop()\n"; for debugging end dispatch timer
                 dispatcherTimer.Stop();
                 //IsEnabled should now be false after calling stop
-                TimerLog.Text += "dispatcherTimer.IsEnabled = " + dispatcherTimer.IsEnabled + "\n";
+                // TimerLog.Text += "dispatcherTimer.IsEnabled = " + dispatcherTimer.IsEnabled + "\n";  for debugging
                 span = stopTime - startTime;
-                TimerLog.Text += "Total Time Start-Stop: " + span.ToString() + "\n";
+                //TimerLog.Text += "Total Time Start-Stop: " + span.ToString() + "\n";  for debugging
             }
-        }
-       // private void Page_Loaded_1(object sender, RoutedEventArgs e)
-       // {
-       //     DispatcherTimerSetup();
-       // }
+            */
+            var path1 = new Windows.UI.Xaml.Shapes.Path();
+            path1.Fill = new SolidColorBrush(Windows.UI.Colors.Indigo);
 
-       
+
+            var geometryGroup1 = new GeometryGroup();
+
+
+            var ellipseGeometry1 = new EllipseGeometry();
+            ellipseGeometry1.Center = new Point(positionX, positionY);
+            ellipseGeometry1.RadiusX = radius;
+            ellipseGeometry1.RadiusY = radius;
+            geometryGroup1.Children.Add(ellipseGeometry1);
+
+            var pathGeometry1 = new PathGeometry();
+
+
+            geometryGroup1.Children.Add(pathGeometry1);
+            path1.Data = geometryGroup1;
+
+            layoutRoot.Children.Clear();
+            layoutRoot.Children.Add(path1);
+
+            positionX += speedX;
+            positionY += speedY;
+
+            if (positionY + radius > layoutRoot.ActualHeight)
+            {
+                speedY *= -1;
+            }
+
+            if (positionX + radius > layoutRoot.ActualWidth)
+            {
+                speedX *= -1;
+            }
+            if (positionY - radius < 0)
+            {
+                speedY *= -1;
+            }
+
+            if (positionX - radius < 0)
+            {
+                speedX *= -1;
+            }
+
+        }
 
         private void Page_Loading(FrameworkElement sender, object args)
         {
