@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
+using static Windows.UI.Color;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -25,22 +26,19 @@ namespace AnimationDemo
     public sealed partial class MainPage : Page
     {
 
+        //public static Windows.UI.Color.FromArgb(byte a, byte r, byte g, byte b);
 
         public MainPage()
         {
             this.InitializeComponent();
-            /* var ellipse1 = new Ellipse();
-            ellipse1.Fill = new SolidColorBrush(Windows.UI.Colors.SteelBlue);
-            ellipse1.Width = 100;
-            ellipse1.Height = 100;
-             */
+
         }
 
 
         DispatcherTimer dispatcherTimer;
         DateTimeOffset startTime;
         DateTimeOffset lastTime;
-        //DateTimeOffset stopTime;
+        DateTimeOffset stopTime;
 
         int timesTicked = 1;
         //int timesToTick = 10;
@@ -50,6 +48,10 @@ namespace AnimationDemo
         int radius = 50;
         int speedX = 5;
         int speedY = 5;
+        byte a = 0;
+        byte r = 50;
+        byte g = 50;
+        byte b = 50;
 
         public void DispatcherTimerSetup()
         {
@@ -76,10 +78,29 @@ namespace AnimationDemo
             //TimerLog.Text += timesTicked + "\t time since last tick: " + span.ToString() + "\n";  for debugging
             timesTicked++;
 
-            /*
-            ellipse1.PositionX++;
-            ellipse1.PositionY++;
-            */
+            if (a > 255)
+            {
+                a = 0;
+            }
+            else a+=51;
+
+            if (r > 255)
+            {
+                r = 0;
+            }
+            else r+=5;
+
+            if (g < 0)
+            {
+                g = 255;
+            }
+            else g--;
+
+            if (b > 255)
+            {
+                b = 0;
+            }
+            else b++;
 
             /*
             if (timesTicked > timesToTick)
@@ -94,8 +115,12 @@ namespace AnimationDemo
             }
             */
             var path1 = new Windows.UI.Xaml.Shapes.Path();
-            path1.Fill = new SolidColorBrush(Windows.UI.Colors.Indigo);
 
+
+            //public static Windows.UI.Color FromArgb(byte a, byte r, byte g, byte b);
+            path1.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(a, r, g, b));
+
+            
 
             var geometryGroup1 = new GeometryGroup();
 
@@ -136,12 +161,12 @@ namespace AnimationDemo
             {
                 speedX *= -1;
             }
-
         }
 
         private void Page_Loading(FrameworkElement sender, object args)
         {
             DispatcherTimerSetup();
         }
+
     }
 }//animation demo
