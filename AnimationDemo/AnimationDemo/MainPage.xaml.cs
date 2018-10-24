@@ -26,32 +26,29 @@ namespace AnimationDemo
     public sealed partial class MainPage : Page
     {
 
-        //public static Windows.UI.Color.FromArgb(byte a, byte r, byte g, byte b);
-
         public MainPage()
         {
             this.InitializeComponent();
-
         }
 
-
+        //Create structs required for dispatch timer to function
         DispatcherTimer dispatcherTimer;
         DateTimeOffset startTime;
         DateTimeOffset lastTime;
-        DateTimeOffset stopTime;
+        //DateTimeOffset stopTime; //Stop time not needed in this scope
 
         int timesTicked = 1;
-        //int timesToTick = 10;
+        //int timesToTick = 10; //Only necessary if stopping time
 
         int positionX = 50;
         int positionY = 50;
         int radius = 50;
         int speedX = 5;
         int speedY = 5;
-        byte a = 0;
-        byte r = 50;
-        byte g = 50;
-        byte b = 50;
+        byte a = 0; //brightness value
+        byte r = 50; //red value
+        byte g = 50; //green value
+        byte b = 50; //blue value
 
         public void DispatcherTimerSetup()
         {
@@ -117,13 +114,14 @@ namespace AnimationDemo
             var path1 = new Windows.UI.Xaml.Shapes.Path();
 
 
-            //public static Windows.UI.Color FromArgb(byte a, byte r, byte g, byte b);
+            /*
+             * public static Windows.UI.Color.FromArgb(byte a, byte r, byte g, byte b);
+             * The above line of code allows us to adjust specific values of: Brightness, Red, Green and Blue
+            */
+
             path1.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(a, r, g, b));
 
-            
-
             var geometryGroup1 = new GeometryGroup();
-
 
             var ellipseGeometry1 = new EllipseGeometry();
             ellipseGeometry1.Center = new Point(positionX, positionY);
